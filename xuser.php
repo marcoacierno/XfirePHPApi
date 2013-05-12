@@ -1,5 +1,5 @@
 <?php
-require ("xerrors.php");
+include_once ("xerrors.php");
 
 class XUser
 {
