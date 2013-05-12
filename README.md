@@ -1,6 +1,6 @@
-Warning: Sorry, for now the README is only in italian. <br />
-
-== Come si usa ==
+Warning: Sorry, for now the README is only in italian.
+XClan
+=======
 Includere nel tuo script la classe che ti interessa:<br />
 include "xclan.php";<br />
 Per includere la classe relativa ai clans. <br />
