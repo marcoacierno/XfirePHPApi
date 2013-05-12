@@ -1,9 +1,8 @@
 Warning: Sorry, for now the README is only in italian.
 XClan
 =======
-Includere nel tuo script la classe che ti interessa:<br />
-include "xclan.php";<br />
-Per includere la classe relativa ai clans. <br />
-$clan = new XClan("sigma7"); <br />
-Inizializzare la classe inserendo il nome del clan/community che ti interessa... ecco fatto! <br />
-Ora avete accesso a tutte le informazioni pubbliche del team come il nome, la descrizione o i membri! <br />
+Se sei interessato ad usare la classe XClan per ottenere tutte le informazioni riguardo un team o una community includere il file xclan.php nel tuo file php.<br />
+<code>include "xclan.php";<code>
+Una volta fatto inizializzare la clan con il nome del team a cui sei interessato:
+<code>$clan = new XClan("team_name");</code>
+Ecco fatto! Ora avete accesso a tutte le informazioni riguardo quella community o clan!
