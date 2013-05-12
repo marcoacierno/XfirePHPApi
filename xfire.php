@@ -34,6 +34,8 @@ class XClan
 				$this->teamlogo  = $dom->getElementsByTagName("logo")->item(0)->nodeValue;
 				$this->tdescription  = $dom->getElementsByTagName("description")->item(0)->nodeValue;
 				$this->teamsite  = $dom->getElementsByTagName("website")->item(0)->nodeValue;
+				$this->tmembers  = (int)$dom->getElementsByTagName("members")->item(0)->nodeValue;
+				
 			}
 		}
 	}
@@ -59,8 +61,8 @@ class XClan
 			if ($dom->load('http://www.xfire.com/xml/'.$this->team.'/clan_members')) {
 				$roster = $dom->getElementsByTagName("roster");
 
-				$this->thiddens = $roster->item(0)->getAttribute("hidden");
-				$this->tmembers = $roster->item(0)->getAttribute("members");
+				$this->thiddens = (int)$roster->item(0)->getAttribute("hidden");
+				$this->tmembers = (int)$roster->item(0)->getAttribute("members");
 				
 				$members = $dom->getElementsByTagName("member");
 				$lastIdx = 0;
