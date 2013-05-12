@@ -107,5 +107,9 @@ class XClan
 	public function getTeamDescription () {
 		return $this->tdescription;
 	}	
+	
+	public function getTeamNMembers () {
+		return $this->tmembers;	
+	}
 }
 ?>	
