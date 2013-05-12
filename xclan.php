@@ -1,10 +1,13 @@
 <?php
+require ("xerrors.php");
+
 class XClan
 {
 	private $team     = NULL;
 	private $tmembers = 0;
 	private $thiddens = 0;
 	private $arrcache = NULL;
+	public  $error    = XErrors::NO_ERROR;
 	
 	/**
 	 * Team info
@@ -25,9 +28,28 @@ class XClan
 			 * store basic infos
 			 */
 			
-			$dom = new DOMDocument;
+			$this->__parseData();
+		}
+	}
+	
+	public function setClan($clan) {
+		if (isset($clan)) {
+			$this->team = $clan;
+			$this->arrcache = NULL;
 			
-			if ($dom->load ('http://www.xfire.com/xml/'.$clan.'/clan_profile')) {
+			$this->__parseData();
+		}
+	}
+	
+	private function __parseData () {
+		$dom = new DOMDocument;
+		
+		if ($dom->load ('http://www.xfire.com/xml/'.$this->team.'/clan_profile')) {
+			if ($dom->getElementsByTagName("error")->length > 0) {
+				// Si è verificato un errore
+				$this->error = XErrors::INVALID_USERORCLAN;	
+			}
+			else {
 				$this->teamname  = $dom->getElementsByTagName("longname")->item(0)->nodeValue;
 				$this->teamtype  = $dom->getElementsByTagName("clantype")->item(0)->nodeValue;
 				$this->foundedts = $dom->getElementsByTagName("founded")->item(0)->nodeValue;
@@ -35,15 +57,8 @@ class XClan
 				$this->tdescription  = $dom->getElementsByTagName("description")->item(0)->nodeValue;
 				$this->teamsite  = $dom->getElementsByTagName("website")->item(0)->nodeValue;
 				$this->tmembers  = (int)$dom->getElementsByTagName("members")->item(0)->nodeValue;
-				
 			}
-		}
-	}
-	
-	public function setClan($clan) {
-		if (isset($clan)) {
-			$this->team = $clan;
-		}
+		}		
 	}
 	
 	/**
@@ -51,6 +66,10 @@ class XClan
 	 */
 	
 	public function getTeamMembers($force = false) {
+		if ($this->error == XErrors::INVALID_USERORCLAN) {
+			return false;	
+		}
+		
 		if (is_null($this->team)) {
 			return false;	
 		}
@@ -85,30 +104,58 @@ class XClan
 	}
 	
 	public function getTeamName() {
+		if ($this->error == XErrors::INVALID_USERORCLAN) {
+			return false;	
+		}
+		
 		return $this->teamname;
 	}
 	
 	public function getTeamType () {
+		if ($this->error == XErrors::INVALID_USERORCLAN) {
+			return false;	
+		}
+		
 		return $this->teamtype;
 	}
 
 	public function getFoundedTime () {
+		if ($this->error == XErrors::INVALID_USERORCLAN) {
+			return false;	
+		}
+		
 		return $this->foundedts;
 	}	
 	
 	public function getTeamLogo () {
+		if ($this->error == XErrors::INVALID_USERORCLAN) {
+			return false;	
+		}
+
 		return $this->teamlogo;
 	}	
 
 	public function getTeamSite () {
+		if ($this->error == XErrors::INVALID_USERORCLAN) {
+			return false;	
+		}
+		
 		return $this->teamsite;
 	}	
 	
 	public function getTeamDescription () {
+		if ($this->error == XErrors::INVALID_USERORCLAN) {
+			return false;	
+		}
+		
 		return $this->tdescription;
 	}	
 	
 	public function getTeamNMembers () {
+		if ($this->error == XErrors::INVALID_USERORCLAN) {
+			return false;	
+		}
+		
 		return $this->tmembers;	
 	}
 }
