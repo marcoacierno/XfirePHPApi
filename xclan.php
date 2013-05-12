@@ -8,6 +8,7 @@ class XClan
 	private $thiddens = 0;
 	private $arrcache = NULL;
 	public  $error    = XErrors::NO_ERROR;
+	public  $errmsg   = NULL;
 	
 	/**
 	 * Team info
@@ -47,7 +48,8 @@ class XClan
 		if ($dom->load ('http://www.xfire.com/xml/'.$this->team.'/clan_profile')) {
 			if ($dom->getElementsByTagName("error")->length > 0) {
 				// Si è verificato un errore
-				$this->error = XErrors::INVALID_USERORCLAN;	
+				$this->error  = XErrors::INVALID_USERORCLAN;	
+				$this->errmsg = $dom->getElementsByTagName("error")->item(0)->nodeValue;
 			}
 			else {
 				$this->teamname  = $dom->getElementsByTagName("longname")->item(0)->nodeValue;
@@ -57,8 +59,13 @@ class XClan
 				$this->tdescription  = $dom->getElementsByTagName("description")->item(0)->nodeValue;
 				$this->teamsite  = $dom->getElementsByTagName("website")->item(0)->nodeValue;
 				$this->tmembers  = (int)$dom->getElementsByTagName("members")->item(0)->nodeValue;
+				
+				$this->error = XErrors::NO_ERROR;
 			}
-		}		
+		}	
+		else {
+			$this->error = XErrors::XML_ERROR;	
+		}
 	}
 	
 	/**

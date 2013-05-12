@@ -3,7 +3,9 @@ require ("xerrors.php");
 
 class XUser
 {
-	private $user = NULL;
+	private $user   = NULL;
+	public  $error  = XErrors::NO_ERROR;
+	public  $errmsg = NULL;	
 	
 	/**
 	 * User data
@@ -25,14 +27,26 @@ class XUser
 	private $country    = NULL;
 	private $location   = NULL;
 	
-	function ____construct($name) {
+	private $ufriends   = NULL;
+	
+	function __construct($name) {
 		if (isset($name)) {
 			$this->user = $name;	
-			
-			$dom = new DOMDocument;
-			
-			if ($dom->load ('http://www.xfire.com/xml/'.$name.'/profile'))
-			{
+			$this->__parseData();
+		}
+	}
+	
+	private function __parseData () {
+		
+		$dom = new DOMDocument;
+		
+		if ($dom->load ('http://www.xfire.com/xml/'.$this->user.'/profile'))
+		{
+			if ($dom->getElementsByTagName("error")->length > 0) {
+				$this->error = XErrors::INVALID_USERORCLAN;
+				$this->errmsg = $dom->getElementsByTagName("error")->item(0)->nodeValue;
+			}
+			else {
 				$this->nickname  	= $dom->getElementsByTagName("nickname")->item(0)->nodeValue;
 				$this->avatar  	 	= $dom->getElementsByTagName("avatar")->item(0)->nodeValue;
 				$this->friends   	= (int)$dom->getElementsByTagName("friends_count")->item(0)->nodeValue;
@@ -47,9 +61,60 @@ class XUser
 				$this->occupation	= $dom->getElementsByTagName("occupation")->item(0)->nodeValue;
 				$this->bio			= $dom->getElementsByTagName("bio")->item(0)->nodeValue;
 				$this->interessi	= $dom->getElementsByTagName("interests")->item(0)->nodeValue;
+				
+				$this->error = XErrors::NO_ERROR;
 			}
+		}
+		else {
+			$this->error = XErrors::XML_ERROR;	
 		}
 	}
 	
+	public function setUser ($user) {
+		if (isset($user)) {
+			$this->user = $user;
+			$this->__parseData ();	
+			return true;
+		}
+		return false;
+	}
+	
+	public function getFriends ($limit, $force = false) {
+		$dom = new DOMDocument;
+		
+		if ($dom->load ('http://www.xfire.com/xml/'.$this->user.'/friends'))
+		{
+			if ($dom->getElementsByTagName("error")->length > 0) {
+				// SHOULD BE IMPROVED
+				// ERROR CAN BE INVALID USER OR THE USER HIDDEN INFOS
+				$this->error = XErrors::INVALID_USERORCLAN;
+				$this->errmsg = $dom->getElementsByTagName("error")->item(0)->nodeValue;
+				return false;
+			}
+			
+			if (is_null($this->ufriends) || $force == true) {
+				$friends = $dom->getElementsByTagName("friend");
+				$lastIdx = 0;
+				
+				$this->ufriends[$lastIdx] = array();
+				
+				foreach($friends as $friend) {
+					$this->ufriends[$lastIdx][$friend->tagName] = $friend->nodeValue;
+					
+				}
+	
+				if ($lastIdx > $limit) {
+						break;	
+				}
+				$lastIdx ++;
+			}
+			
+			return $this->ufriends;
+		}
+		else {
+			$this->error = XErrors::XML_ERROR;	
+			return false;	
+		}
+	}
 }
 ?>
