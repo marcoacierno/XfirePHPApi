@@ -24,6 +24,7 @@ class XClan
 	function __construct($clan) {
 		if (isset($clan)) {
 			$this->team = $clan;
+			$this->arrcache = NULL;
 			
 			/**
 			 * store basic infos

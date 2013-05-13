@@ -27,12 +27,14 @@ class XUser
 	private $country    = NULL;
 	private $location   = NULL;
 	
-	private $ufriends   = NULL;
+	private $ufriends    = NULL;
+	private $screenshots = NULL;
 	
 	function __construct($name) {
 		if (isset($name)) {
 			$this->user = $name;	
 			$this->__parseData();
+			$this->ufriends = NULL;
 		}
 	}
 	
@@ -103,6 +105,10 @@ class XUser
 					
 					foreach($elements as $element) {
 						$this->ufriends[$lastIdx][$element->tagName] = $element->nodeValue;
+					}
+					
+					if ($lastIdx > $limit) {
+						break;	
 					}
 					
 					$lastIdx ++;
