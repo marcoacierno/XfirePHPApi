@@ -96,17 +96,17 @@ class XUser
 				$friends = $dom->getElementsByTagName("friend");
 				$lastIdx = 0;
 				
-				$this->ufriends[$lastIdx] = array();
-				//dont work
-				foreach($friends as $friend) {
-					$this->ufriends[$lastIdx][$friend->tagName] = $friend->nodeValue;
+				foreach ($friends as $friend) {
+					$elements = $friend->getElementsByTagName("*");
 					
+					$this->ufriends[$lastIdx] = array();
+					
+					foreach($elements as $element) {
+						$this->ufriends[$lastIdx][$element->tagName] = $element->nodeValue;
+					}
+					
+					$lastIdx ++;
 				}
-	
-				if ($lastIdx > $limit) {
-						break;	
-				}
-				$lastIdx ++;
 			}
 			
 			return $this->ufriends;
