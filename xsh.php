@@ -41,6 +41,25 @@ class XScreenshots {
 		
 		return $result;
 	}
+
+	public function searchGameScreenshot ($gamename) {
+		if (is_null($this->screenshots)) {
+			return false;	
+		}
+		
+		$result = array ();
+		$idx    = 0;
+		
+		foreach ($this->screenshots as $screen) {
+			if ($screen["game"] == $gamename) {
+				//$result[0] = array("Hello" => "HIO");
+				$result[$idx] = $screen; // 
+				$idx ++;
+			}
+		}
+		
+		return $result;
+	}
 	
 	public function getScreenshots ($force = false) {
 		if ($force || is_null($this->screenshots)) {
