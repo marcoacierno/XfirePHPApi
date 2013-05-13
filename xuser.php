@@ -97,7 +97,7 @@ class XUser
 				$lastIdx = 0;
 				
 				$this->ufriends[$lastIdx] = array();
-				
+				//dont work
 				foreach($friends as $friend) {
 					$this->ufriends[$lastIdx][$friend->tagName] = $friend->nodeValue;
 					
