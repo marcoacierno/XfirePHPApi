@@ -23,10 +23,28 @@ class XScreenshots {
 		}		
 	}
 	
+	public function sarchSHByUser ($user) {
+		if (is_null($this->screenshots)) {
+			return false;	
+		}
+		
+		$result = array ();
+		$idx    = 0;
+		
+		foreach ($this->screenshots as $screen) {
+			if ($screen["username"] == $user) {
+				//$result[0] = array("Hello" => "HIO");
+				$result[$idx] = $screen; // 
+				$idx ++;
+			}
+		}
+		
+		return $result;
+	}
+	
 	public function getScreenshots ($force = false) {
 		if ($force || is_null($this->screenshots)) {
 			$dom = new DOMDocument;
-			
 			
 			if ($this->type == 0) {
 				// 0 => game
