@@ -58,11 +58,16 @@ class XScreenshots {
 								$this->screenshots[$lastIdx][$tag] = array();
 								
 								$sizes = $element->getElementsByTagName("*");
-								
+								/*
 								foreach ($sizes as $size) {
 									$this->screenshots[$lastIdx][$tag][$size->getAttribute("size")] = $size->nodeValue;
-								}
+								}*/
 								
+								$this->screenshots[$lastIdx][$tag][$sizes->item(0)->getAttribute("size")] = $sizes->item(0)->nodeValue;				
+								$this->screenshots[$lastIdx][$tag][$sizes->item(1)->getAttribute("size")] = $sizes->item(1)->nodeValue;
+								$this->screenshots[$lastIdx][$tag][$sizes->item(2)->getAttribute("size")] = $sizes->item(2)->nodeValue;				
+								$this->screenshots[$lastIdx][$tag][$sizes->item(3)->getAttribute("size")] = $sizes->item(3)->nodeValue;	
+								$this->screenshots[$lastIdx][$tag][$sizes->item(4)->getAttribute("size")] = $sizes->item(4)->nodeValue;									
 							}
 							else
 							{
