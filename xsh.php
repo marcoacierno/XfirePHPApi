@@ -1,12 +1,12 @@
 <?php
-include_once ("xerrors.php");
-
 class XScreenshots {
 	private $totalshots = 0;		// sdeve essere disponibile già dal costruttore 
 	private $name  		= NULL;
 	private $type		= 0;		// 0 => Game | 1 => User
-	public  $error  	= XErrors::NO_ERROR;
+	
+	public  $error  	= false;
 	public  $errmsg 	= NULL;	
+	
 	private $screenshots = NULL;
 		
 	function __construct ($name, $type) {
@@ -77,7 +77,7 @@ class XScreenshots {
 			if ($dom->load($url)) {
 				if ($dom->getElementsByTagName("error")->length > 0) {
 					// Si è verificato un errore
-					$this->error  = XErrors::INVALID_USERORCLAN;	
+					$this->error  = true;	
 					$this->errmsg = $dom->getElementsByTagName("error")->item(0)->nodeValue;
 				}
 				else {
@@ -114,10 +114,13 @@ class XScreenshots {
 						
 						$lastIdx ++;
 					}
+					
+					$this->error = false;
 				}
 			}
 			else {
-				$this->error = XErrors::XML_ERROR;	
+				$this->error = true;	
+				$this->errmsg = "XML Error";
 			}
 		}
 		

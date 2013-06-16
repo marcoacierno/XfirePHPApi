@@ -1,10 +1,8 @@
 <?php
-include_once ("xerrors.php");
-
 class XUser
 {
 	private $user   = NULL;
-	public  $error  = XErrors::NO_ERROR;
+	public  $error  = false;
 	public  $errmsg = NULL;	
 	
 	/**
@@ -45,7 +43,7 @@ class XUser
 		if ($dom->load ('http://www.xfire.com/xml/'.$this->user.'/profile'))
 		{
 			if ($dom->getElementsByTagName("error")->length > 0) {
-				$this->error = XErrors::INVALID_USERORCLAN;
+				$this->error = true;
 				$this->errmsg = $dom->getElementsByTagName("error")->item(0)->nodeValue;
 			}
 			else {
@@ -64,11 +62,12 @@ class XUser
 				$this->bio			= $dom->getElementsByTagName("bio")->item(0)->nodeValue;
 				$this->interessi	= $dom->getElementsByTagName("interests")->item(0)->nodeValue;
 				
-				$this->error = XErrors::NO_ERROR;
+				$this->error = false;
 			}
 		}
 		else {
-			$this->error = XErrors::XML_ERROR;	
+			$this->error = true;	
+			$this->errmsg = "XML Error";
 		}
 	}
 	
@@ -89,7 +88,7 @@ class XUser
 			if ($dom->getElementsByTagName("error")->length > 0) {
 				// SHOULD BE IMPROVED
 				// ERROR CAN BE INVALID USER OR THE USER HIDDEN INFOS
-				$this->error = XErrors::INVALID_USERORCLAN;
+				$this->error = true;
 				$this->errmsg = $dom->getElementsByTagName("error")->item(0)->nodeValue;
 				return false;
 			}
@@ -115,10 +114,12 @@ class XUser
 				}
 			}
 			
+			$this->error = false;
 			return $this->ufriends;
 		}
 		else {
-			$this->error = XErrors::XML_ERROR;	
+			$this->error = true;	
+			$this->errmsg = "XML Error";
 			return false;	
 		}
 	}

@@ -1,13 +1,11 @@
 <?php
-include_once ("xerrors.php");
-
 class XClan
 {
 	private $team     = NULL;
 	private $tmembers = 0;
 	private $thiddens = 0;
 	private $arrcache = NULL;
-	public  $error    = XErrors::NO_ERROR;
+	public  $error    = false;
 	public  $errmsg   = NULL;
 	
 	/**
@@ -49,7 +47,7 @@ class XClan
 		if ($dom->load ('http://www.xfire.com/xml/'.$this->team.'/clan_profile')) {
 			if ($dom->getElementsByTagName("error")->length > 0) {
 				// Si è verificato un errore
-				$this->error  = XErrors::INVALID_USERORCLAN;	
+				$this->error  = true;	
 				$this->errmsg = $dom->getElementsByTagName("error")->item(0)->nodeValue;
 			}
 			else {
@@ -61,11 +59,12 @@ class XClan
 				$this->teamsite  = $dom->getElementsByTagName("website")->item(0)->nodeValue;
 				$this->tmembers  = (int)$dom->getElementsByTagName("members")->item(0)->nodeValue;
 				
-				$this->error = XErrors::NO_ERROR;
+				$this->error = true;
 			}
 		}	
 		else {
-			$this->error = XErrors::XML_ERROR;	
+			$this->error = true;	
+			$this->errmsg = "XML Error";
 		}
 	}
 	
@@ -74,10 +73,11 @@ class XClan
 	 */
 	
 	public function getTeamMembers($force = false) {
-		if ($this->error == XErrors::INVALID_USERORCLAN) {
+		/*if ($this->error == XErrors::INVALID_USERORCLAN) {
 			return false;	
 		}
-		
+		*/
+
 		if (is_null($this->team)) {
 			return false;	
 		}
@@ -112,7 +112,7 @@ class XClan
 	}
 	
 	public function getTeamName() {
-		if ($this->error == XErrors::INVALID_USERORCLAN) {
+		if (is_null($this->team)) {
 			return false;	
 		}
 		
@@ -120,7 +120,7 @@ class XClan
 	}
 	
 	public function getTeamType () {
-		if ($this->error == XErrors::INVALID_USERORCLAN) {
+		if (is_null($this->team)) {
 			return false;	
 		}
 		
@@ -128,7 +128,7 @@ class XClan
 	}
 
 	public function getFoundedTime () {
-		if ($this->error == XErrors::INVALID_USERORCLAN) {
+		if (is_null($this->team)) {
 			return false;	
 		}
 		
@@ -136,7 +136,7 @@ class XClan
 	}	
 	
 	public function getTeamLogo () {
-		if ($this->error == XErrors::INVALID_USERORCLAN) {
+		if (is_null($this->team)) {
 			return false;	
 		}
 
@@ -144,7 +144,7 @@ class XClan
 	}	
 
 	public function getTeamSite () {
-		if ($this->error == XErrors::INVALID_USERORCLAN) {
+		if (is_null($this->team)) {
 			return false;	
 		}
 		
@@ -152,7 +152,7 @@ class XClan
 	}	
 	
 	public function getTeamDescription () {
-		if ($this->error == XErrors::INVALID_USERORCLAN) {
+		if (is_null($this->team)) {
 			return false;	
 		}
 		
@@ -160,7 +160,7 @@ class XClan
 	}	
 	
 	public function getTeamNMembers () {
-		if ($this->error == XErrors::INVALID_USERORCLAN) {
+		if (is_null($this->team)) {
 			return false;	
 		}
 		
